@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airline Passenger Satisfaction Analytics</title>
+
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">&#x2708;</span>
+                <div class="logo-text">
+                    <h1>Passenger Analytics</h1>
+                    <span class="version">v1.0.0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <h3 class="nav-title">Pages</h3>
+            <ul class="nav-links">
+                <li>
+                    <a href="#" class="nav-link active" data-page="overview">
+                        <span class="nav-icon">&#x1F4CB;</span>
+                        Executive Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-page="demographics">
+                        <span class="nav-icon">&#x1F465;</span>
+                        Demographic Analysis
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-page="statistics">
+                        <span class="nav-icon">&#x1F52C;</span>
+                        Statistical Insights
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-section">
+            <h3 class="nav-title">Filters</h3>
+            <div class="filter-group">
+                <label for="filter-age">Age Group</label>
+                <select id="filter-age" class="filter-select">
+                    <option value="All">All Ages</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-gender">Gender</label>
+                <select id="filter-gender" class="filter-select">
+                    <option value="All">All Genders</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filter-region">Travel Class</label>
+                <select id="filter-region" class="filter-select">
+                    <option value="All">All Classes</option>
+                </select>
+            </div>
+            <button id="clearFilters" class="clear-filters-btn">Clear Filters</button>
+        </div>
+
+        <div class="sidebar-footer">
+            <p>Airline Passenger Satisfaction Analytics</p>
+            <p class="copyright">Executive Survey Intelligence & Decision Support System</p>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Loading State -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <p>Loading dashboard data...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-message" id="errorMessage" style="display: none;">
+            <h2>Data Not Found</h2>
+            <p>Please run the Python pipeline first to generate the required data files:</p>
+            <pre>python run_pipeline.py</pre>
+            <p>This will generate <code>outputs/dashboard_metrics.json</code> needed by this dashboard.</p>
+        </div>
+
+        <!-- Page: Executive Overview -->
+        <section class="page active" id="page-overview">
+            <div class="page-header">
+                <h2>Executive Overview</h2>
+                <p class="subtitle">Airline Passenger Satisfaction Analysis &mdash; 129,880 Survey Responses</p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid" id="kpiGrid">
+                <div class="kpi-card">
+                    <h3>Total Responses</h3>
+                    <div class="value" id="kpi-total">--</div>
+                    <div class="subtitle">Valid records analyzed</div>
+                </div>
+                <div class="kpi-card kpi-success">
+                    <h3>Overall Satisfaction</h3>
+                    <div class="value" id="kpi-leading">--</div>
+                    <div class="subtitle" id="kpi-leading-pct">--% satisfied</div>
+                </div>
+                <div class="kpi-card">
+                    <h3>Satisfaction Gap</h3>
+                    <div class="value" id="kpi-margin">--</div>
+                    <div class="subtitle">Lead margin (pts)</div>
+                </div>
+                <div class="kpi-card kpi-info">
+                    <h3>Data Quality</h3>
+                    <div class="value" id="kpi-missing">--</div>
+                    <div class="subtitle">Completeness score</div>
+                </div>
+            </div>
+
+            <!-- Dataset Info -->
+            <div class="dataset-info">
+                <div class="dataset-info-item">
+                    <span class="dataset-label">Dataset</span>
+                    <span class="dataset-value">Airline Passenger Satisfaction</span>
+                </div>
+                <div class="dataset-info-item">
+                    <span class="dataset-label">Records</span>
+                    <span class="dataset-value">129,880</span>
+                </div>
+                <div class="dataset-info-item">
+                    <span class="dataset-label">Features</span>
+                    <span class="dataset-value">5 analyzed</span>
+                </div>
+                <div class="dataset-info-item">
+                    <span class="dataset-label">Missing Data</span>
+                    <span class="dataset-value">0.0%</span>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="chart-row">
+                <div class="chart-container chart-wide">
+                    <h3>Passenger Satisfaction Distribution</h3>
+                    <div id="chart-distribution" class="chart"></div>
+                </div>
+                <div class="chart-container chart-narrow">
+                    <h3>Overall Satisfaction Split</h3>
+                    <div id="chart-pie" class="chart"></div>
+                </div>
+            </div>
+
+            <!-- Executive Insights -->
+            <div class="insights-section">
+                <h3>Executive Decision Summary</h3>
+                <div id="insights-container" class="insights-grid"></div>
+            </div>
+        </section>
+
+        <!-- Page: Demographic Analysis -->
+        <section class="page" id="page-demographics">
+            <div class="page-header">
+                <h2>Demographic Analysis</h2>
+                <p class="subtitle">Satisfaction patterns across passenger demographics</p>
+            </div>
+
+            <!-- Demographic Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="age-analysis">Age Group</button>
+                <button class="tab" data-tab="gender-analysis">Gender</button>
+                <button class="tab" data-tab="regional-analysis">Travel Class</button>
+            </div>
+
+            <!-- Tab: Age Analysis -->
+            <div class="tab-content active" id="tab-age-analysis">
+                <div class="chart-container">
+                    <h3>Satisfaction by Age Group</h3>
+                    <div id="chart-age-heatmap" class="chart"></div>
+                </div>
+                <div class="table-container">
+                    <h3>Age Group Cross-Tabulation</h3>
+                    <div id="table-age" class="table-wrapper"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Gender Analysis -->
+            <div class="tab-content" id="tab-gender-analysis">
+                <div class="chart-container">
+                    <h3>Satisfaction by Gender</h3>
+                    <div id="chart-gender-heatmap" class="chart"></div>
+                </div>
+                <div class="table-container">
+                    <h3>Gender Cross-Tabulation</h3>
+                    <div id="table-gender" class="table-wrapper"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Travel Class Analysis -->
+            <div class="tab-content" id="tab-regional-analysis">
+                <div class="chart-container">
+                    <h3>Passenger Satisfaction by Travel Class</h3>
+                    <div id="chart-regional-bar" class="chart"></div>
+                </div>
+                <div class="table-container">
+                    <h3>Travel Class Performance Ranking</h3>
+                    <div id="table-regional" class="table-wrapper"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page: Statistical Insights -->
+        <section class="page" id="page-statistics">
+            <div class="page-header">
+                <h2>Statistical Insights</h2>
+                <p class="subtitle">Hypothesis testing, confidence intervals, and effect sizes</p>
+            </div>
+
+            <!-- Chi-Square Results -->
+            <div class="chart-container">
+                <h3>Chi-Square Test of Independence</h3>
+                <div id="table-chi2" class="table-wrapper"></div>
+                <p class="interpretation" id="chi2-interpretation"></p>
+            </div>
+
+            <!-- Confidence Intervals -->
+            <div class="chart-container">
+                <h3>95% Confidence Intervals for Satisfaction Rates</h3>
+                <div id="chart-ci" class="chart"></div>
+            </div>
+
+            <!-- Margin of Error -->
+            <div class="chart-container">
+                <h3>Margin of Error Summary</h3>
+                <div id="table-moe" class="table-wrapper"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+# Airline Passenger Satisfaction Analytics Configuration
+# Version: 1.0.0
+
+app:
+  title: "Airline Passenger Satisfaction Analytics"
+  subtitle: "Executive Survey Intelligence & Decision Support System"
+  version: "1.0.0"
+
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+
+required_columns:
+  - respondent_id
+  - age_group
+  - gender
+  - region
+  - selected_option
+
+statistics:
+  confidence_level: 0.95
+  z_score: 1.96
+
+colors:
+  primary: "#1B2A4A"
+  secondary: "#4A6FA5"
+  accent: "#D4AF37"
+  success: "#28A745"
+  warning: "#FFC107"
+  danger: "#DC3545"
+  background: "#F8F9FA"
+  text: "#2C3E50"
+  light_gray: "#E9ECEF"
+  palette:
+    - "#1B2A4A"
+    - "#4A6FA5"
+    - "#D4AF37"
+    - "#28A745"
+    - "#E74C3C"
+    - "#9B59B6"
+    - "#1ABC9C"
+    - "#F39C12"
+
+thresholds:
+  lead_margin_high: 15
+  lead_margin_medium: 5
+  missing_rate_warning: 5
+  min_sample_size: 30
+  chi_square_significance: 0.05
+
+insights:
+  max_top_options: 3
+  risk_threshold_missing_pct: 10
+  risk_threshold_duplicate_pct: 5
