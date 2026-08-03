@@ -12,7 +12,7 @@ const DataManager = (() => {
      */
     async function loadMetrics() {
         try {
-            const response = await fetch('../outputs/dashboard_metrics.json');
+            const response = await fetch('./outputs/dashboard_metrics.json');
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
