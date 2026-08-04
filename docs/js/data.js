@@ -254,7 +254,7 @@ const DataManager = (() => {
     function formatPValue(p) {
         if (p === undefined || p === null) return '--';
         if (p < 0.001) return '< 0.001';
-        return p.toFixed(4);
+        return p.toFixed(3);
     }
 
     return {

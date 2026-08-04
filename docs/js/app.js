@@ -265,10 +265,10 @@ const App = (() => {
             const sigClass = d.is_significant ? 'significant' : 'not-significant';
             html += '<tr>';
             html += `<td><strong>${test.label}</strong></td>`;
-            html += `<td>${d.chi2.toFixed(4)}</td>`;
+            html += `<td>${d.chi2.toFixed(3)}</td>`;
             html += `<td>${DataManager.formatPValue(d.p_value)}</td>`;
             html += `<td>${d.degrees_of_freedom}</td>`;
-            html += `<td>${d.cramers_v.toFixed(4)}</td>`;
+            html += `<td>${d.cramers_v.toFixed(3)}</td>`;
             html += `<td class="${sigClass}">${d.is_significant ? 'Yes' : 'No'}</td>`;
             html += '</tr>';
         });
