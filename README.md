@@ -315,8 +315,6 @@ airline-passenger-satisfaction-analytics/
 │   │   └── train.csv              # Airline passenger dataset
 │   └── processed/
 │       └── processed_survey_data.csv
-├── outputs/
-│   └── dashboard_metrics.json     # Generated metrics
 ├── reports/
 │   ├── project_report.md          # Technical documentation
 │   └── executive_summary.md       # Business-focused overview

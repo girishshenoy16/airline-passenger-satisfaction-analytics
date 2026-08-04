@@ -153,8 +153,8 @@ def export_results(results: dict, output_dir: str = ".") -> None:
     results["clean_df"].to_csv(csv_file, index=False)
     print(f"\nExported CSV: {csv_file}")
 
-    # Export dashboard metrics JSON
-    json_dir = output_path / "outputs"
+    # Export dashboard metrics JSON (to docs/outputs for GitHub Pages)
+    json_dir = output_path / "docs" / "outputs"
     json_dir.mkdir(parents=True, exist_ok=True)
     json_file = json_dir / "dashboard_metrics.json"
 
@@ -256,7 +256,7 @@ def main():
     print("=" * 60)
     print("\nOutput files:")
     print(f"  - data/processed_survey_data.csv")
-    print(f"  - outputs/dashboard_metrics.json")
+    print(f"  - docs/outputs/dashboard_metrics.json")
     print("\nTo view the dashboard, open docs/index.html in a browser")
 
 
